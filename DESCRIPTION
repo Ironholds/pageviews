@@ -1,0 +1,12 @@
+Package: pageviews
+Title: An API client for Wikimedia traffic data
+Version: 0.0.1
+Author: Oliver Keyes
+Maintainer: Oliver Keyes <ironholds@gmail.com>
+Description: Pageview data from the 'Wikimedia' sites, such as Wikipedia (https://www.wikipedia.org/), from entire projects to by-article levels of granularity.
+License: MIT + file LICENSE
+LazyData: true
+URL: https://github.com/ironholds/pageviews
+BugReports: https://github.com/ironholds/pageviews
+Suggests: 
+    testthat
