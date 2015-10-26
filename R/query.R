@@ -56,6 +56,7 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "all
   return(pv_query(parameters, ...)$items)
 }
 
+#'@title Retrieve Per-Project Pageview Counts
 #'@export
 project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all",
                               granularity = "daily", start = "2015100100", end = NULL, reformat = TRUE,
