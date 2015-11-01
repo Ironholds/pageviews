@@ -10,3 +10,5 @@ URL: https://github.com/ironholds/pageviews
 BugReports: https://github.com/ironholds/pageviews
 Suggests: 
     testthat
+Imports: jsonlite,
+         httr

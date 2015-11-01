@@ -8,7 +8,39 @@ project_pageviews(project = "en.wikipedia", platform = "all",
   user_type = "all", granularity = "daily", start = "2015100100",
   end = NULL, reformat = TRUE, ...)
 }
+\arguments{
+\item{project}{the name of the project, structured as \code{[language_code].[project]}
+(see the default).}
+
+\item{platform}{The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+"mobile-app". Set to "all" by default.}
+
+\item{user_type}{the type of users. One of "all", "user", "spider" or "bot". "all" by default.}
+
+\item{granularity}{the granularity of data to return; do you want hourly or daily counts? Set
+to "daily" by default.}
+
+\item{start}{the start \code{YYYYMMDDHH} of the range you want to cover.}
+
+\item{end}{the end \code{YYYYMMDDHH} of the range you want to cover. NULL by default, meaning
+that it returns 1 day/hour of data (depending on the value passed to \code{granularity}).}
+
+\item{reformat}{Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.}
+
+\item{...}{further arguments to pass to httr's GET.}
+}
 \description{
-Retrieve Per-Project Pageview Counts
+Retrieve pageview counts for a particular project.
+}
+\examples{
+# Basic call
+enwiki_1_october_pageviews <- project_pageviews()
+
+# Break it down to hourly
+enwiki_hourly <- project_pageviews(granularity = "hourly", end = "2015100123")
+}
+\seealso{
+\code{\link{top_articles}} for the top articles per project in a given date range,
+and \code{\link{article_pageviews}} for per-article pageviews.
 }
 

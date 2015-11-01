@@ -4,8 +4,8 @@
 \alias{top_articles}
 \title{Retrieve Data on Top Articles}
 \usage{
-top_articles(project = "en.wikipedia", platform = "all", year = "all",
-  month = "all", day = "all", ...)
+top_articles(project = "en.wikipedia", platform = "all", year = "2015",
+  month = "10", day = "01", reformat = TRUE, ...)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}
@@ -14,18 +14,28 @@ top_articles(project = "en.wikipedia", platform = "all", year = "all",
 \item{platform}{The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
 "mobile-app". Set to "all" by default.}
 
-\item{year}{The year the articles were "top" in. "all" by default; if it is "all", month
-and day must also be "all".}
+\item{year}{The year the articles were "top" in. 2015 by default.}
 
-\item{month}{The month the articles were "top" in. "all" by default; if it is "all", day must also
-be "all".}
+\item{month}{The month the articles were "top" in. "10" by default; can be set to "all", for all
+the months in \code{year}. If so, \code{day} must also be "all".}
 
-\item{day}{The day the articles were "top" in. "all" by default; this simply returns the top articles
-for the relevant month/year combination.}
+\item{day}{The day the articles were "top" in. "01" by default; can be set to "all", for all
+the days in \code{month}.}
+
+\item{reformat}{Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.}
+
+\item{...}{further arguments to pass to httr's GET.}
 }
 \description{
 \code{top_articles} grabs data on the top articles for a project
 in a given time period, and for a particular platform.
+}
+\examples{
+# Basic example
+enwiki_top_articles <- top_articles()
+
+# Use a narrower platform
+enwiki_mobile_top <- top_articles(platform = "mobile-web")
 }
 \seealso{
 \code{\link{article_pageviews}} for per-article pageviews and \code{\link{project_pageviews}} for
