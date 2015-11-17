@@ -1,4 +1,3 @@
-
 context("Test queries")
 
 test_that("basic project pageview queries work", {
