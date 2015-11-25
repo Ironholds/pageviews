@@ -1,0 +1,10 @@
+Version 0.1.1
+-------------------------------------------------------------------------
+
+BUG FIXES
+* Updated the formatting logic to factor in changes to the JSON provided by the server.
+
+Version 0.1.0
+-------------------------------------------------------------------------
+
+Initial release

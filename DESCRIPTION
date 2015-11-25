@@ -1,7 +1,7 @@
 Package: pageviews
-Title: An API client for Wikimedia traffic data
-Version: 0.1.0
-Date: 2015-11-17
+Title: An API Client for Wikimedia Traffic Data
+Version: 0.1.1
+Date: 2015-11-25
 Author: Oliver Keyes
 Maintainer: Oliver Keyes <ironholds@gmail.com>
 Description: Pageview data from the 'Wikimedia' sites, such as 'Wikipedia' (https://www.wikipedia.org/), from entire projects to per-article

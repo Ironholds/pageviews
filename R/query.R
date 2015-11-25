@@ -101,7 +101,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@export
 top_articles <- function(project = "en.wikipedia", platform = "all", year = "2015",
                          month = "10", day = "01", reformat = TRUE, ...) {
-  
+
   parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform),
                       year, ifelse(month == "all", "all-months", month),
                       sep = "/", ifelse(day == "all", "all-days", day))
@@ -109,12 +109,25 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
   
   if(reformat){
     results <- do.call("rbind", lapply(results, function(x){
-      data <- jsonlite::fromJSON(x$articles)
+      
+      # Reformat the list as a data.frame
+      data <- x$articles
+      reserved_names <- names(data[[1]])
+      data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE), stringsAsFactors = FALSE)
+      names(data) <- reserved_names
+      
+      # Retype
+      data$views <- as.numeric(data$views)
+      data$rank <- as.numeric(data$rank)
+      
+      # Add new fields
       data$project <- x$project
       data$access <- x$access
-      data$year <- x$year
-      data$month <- x$month
-      data$day <- x$day
+      data$year <- as.integer(x$year)
+      data$month <- as.integer(x$month)
+      data$day <- as.integer(x$day)
+      
+      # Return
       return(data)
     }))
   }
