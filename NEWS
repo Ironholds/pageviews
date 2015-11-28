@@ -1,3 +1,14 @@
+Version 0.2.0 [WIP]
+-------------------------------------------------------------------------
+
+NEW FEATURES
+* A new function, "pageview_timestamps", which allows you to format R Date/Time objects for the
+  start and end parameters in pageviews functions.
+
+DEVELOPMENT
+* Error messages clarified to report when a request fails due to an absence of data (thanks to ThomasWilli
+  for reporting it).
+
 Version 0.1.1
 -------------------------------------------------------------------------
 

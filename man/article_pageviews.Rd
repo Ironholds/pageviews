@@ -21,7 +21,8 @@ instead of spaces, but happily converts if you forget to do this.}
 
 \item{user_type}{the type of users. One of "all", "user", "spider" or "bot". "all" by default.}
 
-\item{start}{the start \code{YYYYMMDDHH} of the range you want to cover.}
+\item{start}{the start \code{YYYYMMDDHH} of the range you want to cover. This can be
+easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}.}
 
 \item{end}{the end \code{YYYYMMDDHH} of the range you want to cover. NULL by default, meaning
 that it returns 1 day of data.}

@@ -20,7 +20,8 @@ project_pageviews(project = "en.wikipedia", platform = "all",
 \item{granularity}{the granularity of data to return; do you want hourly or daily counts? Set
 to "daily" by default.}
 
-\item{start}{the start \code{YYYYMMDDHH} of the range you want to cover.}
+\item{start}{the start \code{YYYYMMDDHH} of the range you want to cover. This can be
+easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}}
 
 \item{end}{the end \code{YYYYMMDDHH} of the range you want to cover. NULL by default, meaning
 that it returns 1 day/hour of data (depending on the value passed to \code{granularity}).}

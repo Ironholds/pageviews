@@ -13,7 +13,8 @@
 #'
 #'@param user_type the type of users. One of "all", "user", "spider" or "bot". "all" by default.
 #'
-#'@param start the start \code{YYYYMMDDHH} of the range you want to cover.
+#'@param start the start \code{YYYYMMDDHH} of the range you want to cover. This can be
+#'easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}.
 #'
 #'@param end the end \code{YYYYMMDDHH} of the range you want to cover. NULL by default, meaning
 #'that it returns 1 day of data.
@@ -149,7 +150,8 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 #'@param granularity the granularity of data to return; do you want hourly or daily counts? Set
 #'to "daily" by default.
 #'
-#'@param start the start \code{YYYYMMDDHH} of the range you want to cover.
+#'@param start the start \code{YYYYMMDDHH} of the range you want to cover. This can be
+#'easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}
 #'
 #'@param end the end \code{YYYYMMDDHH} of the range you want to cover. NULL by default, meaning
 #'that it returns 1 day/hour of data (depending on the value passed to \code{granularity}).
