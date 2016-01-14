@@ -4,18 +4,22 @@ Version: 0.2.0
 Date: 2016-01-04
 Author: Oliver Keyes
 Maintainer: Oliver Keyes <ironholds@gmail.com>
-Description: Pageview data from the 'Wikimedia' sites, such as 'Wikipedia' (https://www.wikipedia.org/), from entire projects to per-article
-             levels of granularity, through the new RESTful API and data source (https://wikimedia.org/api/rest_v1/?doc).
+Description: Pageview data from the 'Wikimedia' sites, such as
+    'Wikipedia' (https://www.wikipedia.org/), from entire projects to per-article
+    levels of granularity, through the new RESTful API and data source (https://
+    wikimedia.org/api/rest_v1/?doc).
 License: MIT + file LICENSE
 LazyData: true
 URL: https://github.com/ironholds/pageviews
 BugReports: https://github.com/ironholds/pageviews
-Suggests: 
+Suggests:
     testthat,
     knitr,
     rmarkdown,
     WikipediR,
     WikidataR
-Imports: jsonlite,
-         httr
+Imports:
+    jsonlite,
+    httr
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1

@@ -18,8 +18,7 @@ different types of users and different types of traffic. The `pageviews` package
 ## Per-article data
 
 The most granular data available is on a per-article basis, and can be accessed with `article_pageviews`. This takes a project,
-in the form `language`.`project_class`, an article title (with or without spacing), start and (optionally) end dates, specified in a YYYYMMDDHH format, and (should you choose) the platform and user type to return. By default, it reformats the resulting data as a
-data.frame:
+in the form `language`.`project_class`, an article title (with or without spacing), start and (optionally) end dates, specified in a YYYYMMDDHH format, and (should you choose) the platform and user type to return. By default, it reformats the resulting data as a data.frame:
 
 ```{r, eval = FALSE}
 str(article_pageviews(project = "de.wikipedia", article = "R_(Programmiersprache)",
@@ -33,8 +32,10 @@ str(article_pageviews(project = "de.wikipedia", article = "R_(Programmiersprache
  $ views    : num  308 536 537
 ```
 
-With the `user_type` and `platform` arguments you can include or exclude spiders and other automata, and switch between overall pageviews,
-pageviews to the desktop site, or pageviews to the mobile site or app.
+With the `user_type` and `platform` arguments you can include or exclude spiders and other automata, and switch between overall pageviews, pageviews to the desktop site, or pageviews to the mobile site or app.
+
+Generating the start and end dates can be done with `pageview_timestamps()`, which turns R's date and time
+objects into API-compatible timestamps.
 
 ## Per-project data
 
