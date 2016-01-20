@@ -1,3 +1,11 @@
+Version 0.3.0 [WIP]
+
+BUG FIXES
+* Article titles are now percent-encoded before the GET request is sent. Thanks to Thomas Willi
+for providing the bug report.
+* Support for "all" as a months option is deprecated since nobody will be able to use it until
+early 2017. Thanks to Jeremiah Lewis for the bug report.
+
 Version 0.2.0
 -------------------------------------------------------------------------
 

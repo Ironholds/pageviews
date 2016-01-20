@@ -16,8 +16,7 @@ top_articles(project = "en.wikipedia", platform = "all", year = "2015",
 
 \item{year}{The year the articles were "top" in. 2015 by default.}
 
-\item{month}{The month the articles were "top" in. "10" by default; can be set to "all", for all
-the months in \code{year}. If so, \code{day} must also be "all".}
+\item{month}{The month the articles were "top" in. "10" by default.}
 
 \item{day}{The day the articles were "top" in. "01" by default; can be set to "all", for all
 the days in \code{month}.}

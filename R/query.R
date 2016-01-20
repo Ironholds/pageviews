@@ -50,8 +50,8 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
   
   # Construct parameters
   parameters <- paste("per-article", project, ifelse(platform == "all", "all-access", platform),
-                      ifelse(user_type == "all", "all-agents", user_type), article, "daily",
-                      start, end, sep = "/")
+                      ifelse(user_type == "all", "all-agents", user_type), curl::curl_escape(article),
+                      "daily", start, end, sep = "/")
   
   # Run and return
   data <- pv_query(parameters, ...)$items
@@ -78,8 +78,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'
 #'@param year The year the articles were "top" in. 2015 by default.
 #'
-#'@param month The month the articles were "top" in. "10" by default; can be set to "all", for all
-#'the months in \code{year}. If so, \code{day} must also be "all".
+#'@param month The month the articles were "top" in. "10" by default.
 #'
 #'@param day The day the articles were "top" in. "01" by default; can be set to "all", for all
 #'the days in \code{month}.
@@ -104,8 +103,7 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
                          month = "10", day = "01", reformat = TRUE, ...) {
 
   parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform),
-                      year, ifelse(month == "all", "all-months", month),
-                      sep = "/", ifelse(day == "all", "all-days", day))
+                      year, month, sep = "/", ifelse(day == "all", "all-days", day))
   results <- pv_query(parameters, ...)$items
   
   if(reformat){

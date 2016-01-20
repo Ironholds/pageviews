@@ -1,7 +1,7 @@
 Package: pageviews
 Title: An API Client for Wikimedia Traffic Data
-Version: 0.2.0
-Date: 2016-01-04
+Version: 0.2.9000
+Date: 2016-01-14
 Author: Oliver Keyes
 Maintainer: Oliver Keyes <ironholds@gmail.com>
 Description: Pageview data from the 'Wikimedia' sites, such as
@@ -20,6 +20,7 @@ Suggests:
     WikidataR
 Imports:
     jsonlite,
-    httr
+    httr,
+    curl
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

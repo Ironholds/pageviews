@@ -6,4 +6,5 @@
 #'
 #' @docType package
 #' @name pageviews
+#' @importFrom curl curl_escape
 NULL
