@@ -21,27 +21,16 @@
 #'
 #'@export
 pageview_timestamps <- function(timestamps = Sys.Date(), first = TRUE) {
-  
-  # Check type
-  classes <- c("Date", "POSIXlt", "POSIXct")
-  if(!any(class(timestamps) %in% classes)){
+  template <- "%Y%m%d"
+
+  if("Date" %in% class(timestamps)){
+    template <- ifelse(first == TRUE, paste0(template, "00"), paste0(template, "23"))
+  } else if(any(class(timestamps) %in% c("POSIXlt", "POSIXct"))) {
+    template <- paste0(template, "%H")
+  } else {
     stop("'timestamps' must be of type Date, POSIXlt or POSIXct")
   }
-  is_date <- ifelse(("Date" %in% class(timestamps)), TRUE, FALSE)
-  
-  # Convert to character and strip out unnecessary chars
-  timestamps <- gsub(x = timestamps, pattern = "( |-|:)", replacement = "")
-  
-  # If it's a date, it'll only be 6 chars long, so we have to add 4 more
-  # using "first" to determine what they should be.
-  if(is_date){
-    if(first){
-      return(paste0(timestamps, "0100"))
-    }
-    return(paste0(timestamps, "2400"))
-  }
-  
-  # Otherwise it was a POSIX object so we have the opposite problem.
-  timestamps <- substring(timestamps, 0, 10)
-  return(paste0(timestamps, "00"))
+
+  return(format(timestamps, template))
+
 }
