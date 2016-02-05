@@ -37,7 +37,7 @@
 article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)",
                               platform = "all", user_type = "all",
                               start = "2015100100", end = NULL, reformat = TRUE, ...){
-  
+
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
   if(length(article) > 1){
     return(lapply(article, article_pageviews, project = project, platform = platform,
@@ -47,15 +47,15 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
   if(is.null(end)){
     end <- start
   }
-  
+
   # Construct parameters
   parameters <- paste("per-article", project, ifelse(platform == "all", "all-access", platform),
                       ifelse(user_type == "all", "all-agents", user_type), curl::curl_escape(article),
                       "daily", start, end, sep = "/")
-  
+
   # Run and return
   data <- pv_query(parameters, ...)$items
-  
+
   if(reformat){
     nameset <- names(data[[1]])
     data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE), stringsAsFactors = FALSE)
@@ -105,27 +105,27 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
   parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform),
                       year, month, sep = "/", ifelse(day == "all", "all-days", day))
   results <- pv_query(parameters, ...)$items
-  
+
   if(reformat){
     results <- do.call("rbind", lapply(results, function(x){
-      
+
       # Reformat the list as a data.frame
       data <- x$articles
       reserved_names <- names(data[[1]])
       data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE), stringsAsFactors = FALSE)
       names(data) <- reserved_names
-      
+
       # Retype
       data$views <- as.numeric(data$views)
       data$rank <- as.numeric(data$rank)
-      
+
       # Add new fields
       data$project <- x$project
       data$access <- x$access
       data$year <- as.integer(x$year)
       data$month <- as.integer(x$month)
       data$day <- as.integer(x$day)
-      
+
       # Return
       return(data)
     }))
@@ -172,20 +172,20 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all",
                               granularity = "daily", start = "2015100100", end = NULL, reformat = TRUE,
                               ...){
-  
+
   # Handle timestamps
   if(is.null(end)){
     end <- start
   }
-  
+
   # Construct parameters
   parameters <- paste("aggregate", project, ifelse(platform == "all", "all-access", platform),
                       ifelse(user_type == "all", "all-agents", user_type), granularity,
                       start, end, sep = "/")
-  
+
   # Run
   data <- pv_query(parameters, ...)$items
-  
+
   # Reformat if necessary, return either way.
   if(reformat){
     nameset <- names(data[[1]])
