@@ -2,12 +2,12 @@
 % Please edit documentation in R/timestamps.R
 \name{pageview_timestamps}
 \alias{pageview_timestamps}
-\title{Convert time objects to function with pageviews functions}
+\title{Validate and convert time objects to function with pageviews functions}
 \usage{
 pageview_timestamps(timestamps = Sys.Date(), first = TRUE)
 }
 \arguments{
-\item{timestamps}{a vector of Date, POSIXlt or POSIXct objects.}
+\item{timestamps}{a vector of character, Date, POSIXlt or POSIXct objects.}
 
 \item{first}{whether to, if \code{timestamps} is of date objects, assume the
 first hour in a day (TRUE) or the last (FALSE). TRUE by default.}
@@ -25,6 +25,9 @@ pageview_timestamps(Sys.Date())
 
 # Using a POSIXct object
 pageview_timestamps(Sys.time())
+
+# Validate a character string
+pageview_timestamps("2016020800")
 
 }
 \seealso{
