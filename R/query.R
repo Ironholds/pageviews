@@ -179,10 +179,13 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
                               ...){
 
   # Handle timestamps
+  start <- pageview_timestamps(start)
   if(is.null(end)){
     end <- start
+  } else {
+    end <- pageview_timestamps(end)
   }
-
+  
   # Construct parameters
   parameters <- paste("aggregate", project, ifelse(platform == "all", "all-access", platform),
                       ifelse(user_type == "all", "all-agents", user_type), granularity,
