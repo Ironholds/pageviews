@@ -21,6 +21,13 @@ test_that("Basic per-article queries work", {
   expect_true(ncol(result) == 6)
 })
 
+test_that("Basic per-article queries work (with date objects)", {
+  result <- article_pageviews(start = Sys.Date() - 10, end = Sys.Date())
+  expect_true(is.data.frame(result))
+  expect_true(nrow(result) == 1)
+  expect_true(ncol(result) == 6)
+})
+
 test_that("Timestamp conversion works", {
   expect_equal(pageview_timestamps(as.Date("2015-01-01")), "2015010100")
   expect_equal(pageview_timestamps(as.POSIXct("2015-01-01")), "2015010100")
