@@ -1,8 +1,8 @@
-#'@title Convert time objects to function with pageviews functions
+#'@title Validate and convert time objects to function with pageviews functions
 #'@description \code{pageview_timestamps} converts \code{\link{Date}} and \code{\link{POSIXlt}} and ct
 #'objects to work nicely with the \code{start} and \code{end} parameters in pageviews functions.
 #'
-#'@param timestamps a vector of Date, POSIXlt or POSIXct objects.
+#'@param timestamps a vector of character, Date, POSIXlt or POSIXct objects.
 #'
 #'@param first whether to, if \code{timestamps} is of date objects, assume the
 #'first hour in a day (TRUE) or the last (FALSE). TRUE by default.
@@ -19,29 +19,28 @@
 #'# Using a POSIXct object
 #'pageview_timestamps(Sys.time())
 #'
+#'# Validate a character string
+#'pageview_timestamps("2016020800")
+#'
 #'@export
 pageview_timestamps <- function(timestamps = Sys.Date(), first = TRUE) {
-  
-  # Check type
-  classes <- c("Date", "POSIXlt", "POSIXct")
-  if(!any(class(timestamps) %in% classes)){
+  template <- "%Y%m%d"
+
+  if("character" %in% class(timestamps)){
+    timestamps <- strptime(timestamps, paste0(template, "%H"))
+    if(anyNA(timestamps)) {
+      stop(paste0("'timestamps' must be of the format ", template, "%H"))
+    }
+  }
+
+  if("Date" %in% class(timestamps)){
+    template <- ifelse(first == TRUE, paste0(template, "00"), paste0(template, "23"))
+  } else if(any(class(timestamps) %in% c("POSIXlt", "POSIXct"))) {
+    template <- paste0(template, "%H")
+  } else {
     stop("'timestamps' must be of type Date, POSIXlt or POSIXct")
   }
-  is_date <- ifelse(("Date" %in% class(timestamps)), TRUE, FALSE)
-  
-  # Convert to character and strip out unnecessary chars
-  timestamps <- gsub(x = timestamps, pattern = "( |-|:)", replacement = "")
-  
-  # If it's a date, it'll only be 6 chars long, so we have to add 4 more
-  # using "first" to determine what they should be.
-  if(is_date){
-    if(first){
-      return(paste0(timestamps, "0100"))
-    }
-    return(paste0(timestamps, "2400"))
-  }
-  
-  # Otherwise it was a POSIX object so we have the opposite problem.
-  timestamps <- substring(timestamps, 0, 10)
-  return(paste0(timestamps, "00"))
+
+  return(format(timestamps, template))
+
 }
