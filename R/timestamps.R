@@ -28,7 +28,7 @@ pageview_timestamps <- function(timestamps = Sys.Date(), first = TRUE) {
 
   if("character" %in% class(timestamps)){
     timestamps <- strptime(timestamps, paste0(template, "%H"))
-    if(anyNA(timestamps))) {
+    if(anyNA(timestamps)) {
       stop(paste0("'timestamps' must be of the format ", template, "%H"))
     }
   }

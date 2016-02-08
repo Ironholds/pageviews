@@ -24,7 +24,7 @@ test_that("Basic per-article queries work", {
 test_that("Basic per-article queries work (with date objects)", {
   result <- article_pageviews(start = Sys.Date() - 10, end = Sys.Date())
   expect_true(is.data.frame(result))
-  expect_true(nrow(result) == 1)
+  expect_true(nrow(result) == 10)
   expect_true(ncol(result) == 6)
 })
 
