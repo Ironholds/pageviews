@@ -38,14 +38,19 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
                               platform = "all", user_type = "all",
                               start = "2015100100", end = NULL, reformat = TRUE, ...){
 
+
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
   if(length(article) > 1){
     return(lapply(article, article_pageviews, project = project, platform = platform,
                   user_type = user_type, start = start, end = end, ...))
   }
+
   # Handle timestamps
+  start <- pageview_timestamps(start)
   if(is.null(end)){
     end <- start
+  } else {
+    end <- pageview_timestamps(end)
   }
 
   # Construct parameters
