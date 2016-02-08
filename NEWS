@@ -6,6 +6,10 @@ for providing the bug report.
 * Support for "all" as a months option is deprecated since nobody will be able to use it until
 early 2017. Thanks to Jeremiah Lewis for the bug report.
 
+FEATURES
+* pageview_timestamps is now used internally, meaning you can pass a date, time or character string to the API
+calls and it'll try to work out what you want. Thanks to Jeremiah Lewis for the patch.
+
 Version 0.2.0
 -------------------------------------------------------------------------
 
