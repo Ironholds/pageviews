@@ -16,7 +16,7 @@ Please note that this project is released with a [Contributor Code of Conduct](h
 Version 0.2.0 can be obtained with:
 
     devtools::install_github("ironholds/pageviews")
-    
+
 For the stable release:
 
     install.packages("pageviews")
