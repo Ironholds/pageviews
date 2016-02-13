@@ -66,6 +66,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
     data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE), stringsAsFactors = FALSE)
     names(data) <- nameset
     data$views <- as.numeric(data$views)
+    data$date <- as.Date(data$timestamp, format = "%Y%m%d")
     data <- data[,!names(data) == "granularity"]
   }
   return(data)
@@ -185,7 +186,7 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
   } else {
     end <- pageview_timestamps(end)
   }
-  
+
   # Construct parameters
   parameters <- paste("aggregate", project, ifelse(platform == "all", "all-access", platform),
                       ifelse(user_type == "all", "all-agents", user_type), granularity,
