@@ -67,6 +67,10 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
     names(data) <- nameset
     data$views <- as.numeric(data$views)
     data$date <- as.Date(data$timestamp, format = "%Y%m%d")
+
+    data$language <- gsub("(.*)\\.(.*)", "\\1", data$project)
+    data$project <- gsub("(.*)\\.(.*)", "\\2", data$project)
+
     data <- data[,!names(data) == "granularity"]
   }
   return(data)
