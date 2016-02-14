@@ -1,5 +1,5 @@
 #'@importFrom httr stop_for_status GET user_agent content status_code
-pv_query <- function(params, ...){
+pv_query <- function(params, reformat = TRUE, ...){
   url <- paste0("https://wikimedia.org/api/rest_v1/metrics/pageviews/", params)
   result <- httr::GET(url, httr::user_agent("pageviews API client library - https://github.com/Ironholds/pageviews"))
 
@@ -10,5 +10,49 @@ pv_query <- function(params, ...){
     httr::stop_for_status(result)
   }
 
-  return(httr::content(result))
+  data <- httr::content(result)
+
+  if(reformat){
+    data <- reformat_data(data)
+  }
+
+  return(data)
+}
+
+reformat_data <- function(data){
+  data <- data$items
+
+  if("articles" %in% names(data[[1]])){ # Handle Top Articles formatting
+    result <- data.frame(do.call(rbind, data[[1]]$articles), stringsAsFactors = FALSE)
+    data[[1]]$articles <- NULL
+    meta <- do.call(cbind, data[[1]])
+    data <- cbind(meta, result)
+
+    if(all(data$day == "all")){
+      data["granularity"] <- "month"
+      data$day <- 1
+    } else {
+      data["granularity"] <- "day"
+    }
+
+    data$date <- as.Date(paste(data$year, data$month, data$day, sep = "-"))
+    data$rank <- as.numeric(data$rank)
+
+  } else {
+    data <- data.frame(do.call(rbind, data), stringsAsFactors = FALSE)
+
+    data$date <- as.Date(substr(data$timestamp, 1, 8), format = "%Y%m%d")
+  }
+
+
+  data$views <- as.numeric(data$views)
+  data$language <- gsub("(.*)\\.(.*)", "\\1", data$project)
+  data$project <- gsub("(.*)\\.(.*)", "\\2", data$project)
+
+  # Set Consistent Column Order
+  col_order <- c("project", "language", "article", "access", "agent", "granularity", "date", "rank", "views")
+  col_order <- col_order[col_order %in% names(data)]
+  data <- data[, col_order]
+
+  return(data)
 }

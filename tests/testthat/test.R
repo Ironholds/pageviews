@@ -4,7 +4,7 @@ test_that("basic project pageview queries work", {
   result <- project_pageviews()
   expect_true(is.data.frame(result))
   expect_true(nrow(result) == 1)
-  expect_true(ncol(result) == 6)
+  expect_true(ncol(result) == 7)
 })
 
 test_that("Basic top-article queries work", {
@@ -18,14 +18,14 @@ test_that("Basic per-article queries work", {
   result <- article_pageviews()
   expect_true(is.data.frame(result))
   expect_true(nrow(result) == 1)
-  expect_true(ncol(result) == 6)
+  expect_true(ncol(result) == 8)
 })
 
 test_that("Basic per-article queries work (with date objects)", {
   result <- article_pageviews(start = Sys.Date() - 10, end = Sys.Date())
   expect_true(is.data.frame(result))
   expect_true(nrow(result) == 10)
-  expect_true(ncol(result) == 6)
+  expect_true(ncol(result) == 8)
 })
 
 test_that("Timestamp conversion works", {
@@ -42,5 +42,12 @@ test_that("Timestamps functions work with API", {
 
   expect_true(is.data.frame(result))
   expect_true(nrow(result) == 30)
-  expect_true(ncol(result) == 6)
+  expect_true(ncol(result) == 8)
+})
+
+test_that("All parameter works with top articles", {
+  result <- top_articles(day = "all", reformat = FALSE)
+  expect_true(is.data.frame(result))
+  expect_true(nrow(result) == 30)
+  expect_true(ncol(result) == 8)
 })
