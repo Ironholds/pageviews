@@ -59,20 +59,8 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
                       "daily", start, end, sep = "/")
 
   # Run and return
-  data <- pv_query(parameters, ...)$items
+  data <- pv_query(parameters, reformat, ...)
 
-  if(reformat){
-    nameset <- names(data[[1]])
-    data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE), stringsAsFactors = FALSE)
-    names(data) <- nameset
-    data$views <- as.numeric(data$views)
-    data$date <- as.Date(data$timestamp, format = "%Y%m%d")
-
-    data$language <- gsub("(.*)\\.(.*)", "\\1", data$project)
-    data$project <- gsub("(.*)\\.(.*)", "\\2", data$project)
-
-    data <- data[,!names(data) == "granularity"]
-  }
   return(data)
 }
 
@@ -114,32 +102,8 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 
   parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform),
                       year, month, sep = "/", ifelse(day == "all", "all-days", day))
-  results <- pv_query(parameters, ...)$items
+  results <- pv_query(parameters, reformat, ...)
 
-  if(reformat){
-    results <- do.call("rbind", lapply(results, function(x){
-
-      # Reformat the list as a data.frame
-      data <- x$articles
-      reserved_names <- names(data[[1]])
-      data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE), stringsAsFactors = FALSE)
-      names(data) <- reserved_names
-
-      # Retype
-      data$views <- as.numeric(data$views)
-      data$rank <- as.numeric(data$rank)
-
-      # Add new fields
-      data$project <- x$project
-      data$access <- x$access
-      data$year <- as.integer(x$year)
-      data$month <- as.integer(x$month)
-      data$day <- as.integer(x$day)
-
-      # Return
-      return(data)
-    }))
-  }
   return(results)
 }
 
@@ -197,14 +161,7 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
                       start, end, sep = "/")
 
   # Run
-  data <- pv_query(parameters, ...)$items
+  data <- pv_query(parameters, reformat, ...)
 
-  # Reformat if necessary, return either way.
-  if(reformat){
-    nameset <- names(data[[1]])
-    data <- data.frame(matrix(unlist(data), nrow = length(data), byrow = TRUE), stringsAsFactors = FALSE)
-    names(data) <- nameset
-    data$views <- as.numeric(data$views)
-  }
   return(data)
 }
