@@ -81,7 +81,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="per-article-data" class="section level2">
 <h2>Per-article data</h2>
 <p>The most granular data available is on a per-article basis, and can be accessed with <code>article_pageviews</code>. This takes a project, in the form <code>language</code>.<code>project_class</code>, an article title (with or without spacing), start and (optionally) end dates, specified as R date objects, and (should you choose) the platform and user type to return. By default, it reformats the resulting data as a data.frame:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(<span class="kw">article_pageviews</span>(<span class="dt">project =</span> <span class="st">&quot;de.wikipedia&quot;</span>, <span class="dt">article =</span> <span class="st">&quot;R_(Programmiersprache)&quot;</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pageviews)
+<span class="kw">str</span>(<span class="kw">article_pageviews</span>(<span class="dt">project =</span> <span class="st">&quot;de.wikipedia&quot;</span>, <span class="dt">article =</span> <span class="st">&quot;R_(Programmiersprache)&quot;</span>
   , <span class="dt">start =</span> <span class="kw">as.Date</span>(<span class="st">'2015-11-01'</span>), <span class="dt">end =</span> <span class="kw">as.Date</span>(<span class="st">&quot;2015-11-02&quot;</span>)
   , <span class="dt">user_type =</span> <span class="kw">c</span>(<span class="st">&quot;user&quot;</span>, <span class="st">&quot;bot&quot;</span>), <span class="dt">platform =</span> <span class="kw">c</span>(<span class="st">&quot;desktop&quot;</span>, <span class="st">&quot;mobile-web&quot;</span>)))</code></pre></div>
 <pre><code>## 'data.frame':    8 obs. of  8 variables:

@@ -21,6 +21,7 @@ The most granular data available is on a per-article basis, and can be accessed 
 in the form `language`.`project_class`, an article title (with or without spacing), start and (optionally) end dates, specified as R date objects, and (should you choose) the platform and user type to return. By default, it reformats the resulting data as a data.frame:
 
 ```{r}
+library(pageviews)
 str(article_pageviews(project = "de.wikipedia", article = "R_(Programmiersprache)"
   , start = as.Date('2015-11-01'), end = as.Date("2015-11-02")
   , user_type = c("user", "bot"), platform = c("desktop", "mobile-web")))
