@@ -35,18 +35,14 @@
 #'
 #'@export
 article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)"
-                              , platform = "all", user_type = "all", granularity = "daily"
+                              , platform = "all", user_type = "all"
                               , start = "2015100100", end = NULL, reformat = TRUE, ...){
-
-  if(granularity != "daily"){
-    warning("Granularities besides daily are not currently supported by the `article_pageviews` function.")
-  }
 
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
   article <- curl::curl_escape(article)
-  
+
   data <- pageviews("per-article", project, article, platform, user_type
-                      , granularity, start, end, reformat)
+                      , granularity = "daily", start, end, reformat)
   return(data)
 }
 
