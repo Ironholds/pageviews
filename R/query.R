@@ -43,7 +43,8 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
   }
 
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
-
+  article <- curl::curl_escape(article)
+  
   data <- pageviews("per-article", project, article, platform, user_type
                       , granularity, start, end, reformat)
   return(data)
@@ -156,7 +157,6 @@ pageviews <- function(api, project, article, platform, user_type
 
   platform[platform == "all"] <- "all-access"
   user_type[user_type == "all"] <- "all-agents"
-  article <- curl::curl_escape(article)
 
   # Construct parameters
   parameters <- expand.grid(api, project, platform, user_type
