@@ -1,14 +1,16 @@
 #'@importFrom httr stop_for_status GET user_agent content status_code
 pv_query <- function(params, reformat = TRUE, ...){
-  if(length(params) > 1){
-    data <- lapply(as.list(params), pv_query, reformat = reformat)
-    if(reformat == TRUE){
-      return(do.call(rbind, data))
-    } else {
-      return(data)
-    }
-  }
+  # Run multiple queries, return as list of results
+  data_list <- lapply(as.list(params), pv_query, reformat = reformat)
 
+  if(reformat == TRUE){ # collapses all results into one dataframe
+    return(do.call(rbind, data_list))
+  } else {
+    return(data_list)
+  }
+}
+
+pv_query_single <- function(params, reformat, ...){
   url <- paste0("https://wikimedia.org/api/rest_v1/metrics/pageviews/", params)
 
   result <- httr::GET(url, httr::user_agent("pageviews API client library - https://github.com/Ironholds/pageviews"))

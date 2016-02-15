@@ -59,7 +59,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@param start The date the articles were "top" in. 2015 by default.
 #'
 #'@param granularity the granularity of data to return; "daily" or "monthly", depending on
-#' whether top articles should reflect trends in day or month of the \code{start} date 
+#' whether top articles should reflect trends in day or month of the \code{start} date
 #'
 #'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
 #'
