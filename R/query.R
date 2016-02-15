@@ -56,12 +56,10 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@param platform The platform the pageviews came from; vector of "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param year The year the articles were "top" in. 2015 by default.
+#'@param start The date the articles were "top" in. 2015 by default.
 #'
-#'@param month The month the articles were "top" in. "10" by default.
-#'
-#'@param day The day the articles were "top" in. "01" by default; can be set to "all", for all
-#'the days in \code{month}.
+#'@param granularity the granularity of data to return; "daily" or "monthly", depending on
+#' whether top articles should reflect trends in day or month of the \code{start} date 
 #'
 #'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
 #'
@@ -87,7 +85,7 @@ top_articles <- function(project = "en.wikipedia", platform = "all"
 
   parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform)
                       , format(start, "%Y"), format(start, "%m")
-                      , ifelse(granularity != "daily", "all-days", format(start, "%d")))
+                      , ifelse(granularity == "daily", format(start, "%d"), "all-days"))
 
   parameters <- apply(parameters, 1, paste, collapse = "/")
   results <- pv_query(parameters, reformat, ...)
