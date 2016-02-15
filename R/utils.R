@@ -1,7 +1,7 @@
 #'@importFrom httr stop_for_status GET user_agent content status_code
 pv_query <- function(params, reformat = TRUE, ...){
   # Run multiple queries, return as list of results
-  data_list <- lapply(as.list(params), pv_query, reformat = reformat)
+  data_list <- lapply(as.list(params), pv_query_single, reformat = reformat)
 
   if(reformat == TRUE){ # collapses all results into one dataframe
     return(do.call(rbind, data_list))
