@@ -1,8 +1,17 @@
 #'@importFrom httr stop_for_status GET user_agent content status_code
 pv_query <- function(params, reformat = TRUE, ...){
-  url <- paste0("https://wikimedia.org/api/rest_v1/metrics/pageviews/", params)
-  result <- httr::GET(url, httr::user_agent("pageviews API client library - https://github.com/Ironholds/pageviews"))
+  if(length(params) > 1){
+    data <- lapply(as.list(params), pv_query, reformat = reformat)
+    if(reformat == TRUE){
+      return(do.call(rbind, data))
+    } else {
+      return(data)
+    }
+  }
 
+  url <- paste0("https://wikimedia.org/api/rest_v1/metrics/pageviews/", params)
+
+  result <- httr::GET(url, httr::user_agent("pageviews API client library - https://github.com/Ironholds/pageviews"))
   # Check response success
   if(httr::status_code(result) == 404){
     stop(httr::content(result, type = "application/json")$detail)
@@ -23,7 +32,8 @@ reformat_data <- function(data){
   data <- data$items
 
   if("articles" %in% names(data[[1]])){ # Handle Top Articles formatting
-    result <- data.frame(do.call(rbind, data[[1]]$articles), stringsAsFactors = FALSE)
+    result <- data.frame(do.call(rbind, data[[1]]$articles)
+                        , stringsAsFactors = FALSE)
     data[[1]]$articles <- NULL
     meta <- do.call(cbind, data[[1]])
     data <- cbind(meta, result)
@@ -50,7 +60,8 @@ reformat_data <- function(data){
   data$project <- gsub("(.*)\\.(.*)", "\\2", data$project)
 
   # Set Consistent Column Order
-  col_order <- c("project", "language", "article", "access", "agent", "granularity", "date", "rank", "views")
+  col_order <- c("project", "language", "article", "access"
+                , "agent", "granularity", "date", "rank", "views")
   col_order <- col_order[col_order %in% names(data)]
   data <- data[, col_order]
 

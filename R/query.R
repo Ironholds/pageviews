@@ -40,27 +40,9 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 
 
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
-  if(length(article) > 1){
-    return(lapply(article, article_pageviews, project = project, platform = platform,
-                  user_type = user_type, start = start, end = end, ...))
-  }
 
-  # Handle timestamps
-  start <- pageview_timestamps(start)
-  if(is.null(end)){
-    end <- start
-  } else {
-    end <- pageview_timestamps(end)
-  }
-
-  # Construct parameters
-  parameters <- paste("per-article", project, ifelse(platform == "all", "all-access", platform),
-                      ifelse(user_type == "all", "all-agents", user_type), curl::curl_escape(article),
-                      "daily", start, end, sep = "/")
-
-  # Run and return
-  data <- pv_query(parameters, reformat, ...)
-
+  data <- pageviews("per-article", project, article, platform, user_type
+                      , granularity = "daily", start, end, reformat)
   return(data)
 }
 
@@ -100,8 +82,12 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 top_articles <- function(project = "en.wikipedia", platform = "all", year = "2015",
                          month = "10", day = "01", reformat = TRUE, ...) {
 
-  parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform),
-                      year, month, sep = "/", ifelse(day == "all", "all-days", day))
+  platform[platform == "all"] <- "all-access"
+
+  parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform),
+                      year, month, ifelse(day == "all", "all-days", day))
+
+  parameters <- apply(parameters, 1, paste, collapse = "/")
   results <- pv_query(parameters, reformat, ...)
 
   return(results)
@@ -146,6 +132,14 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all",
                               granularity = "daily", start = "2015100100", end = NULL, reformat = TRUE,
                               ...){
+  data <- pageviews("aggregate", project, article = "", platform, user_type
+                      , granularity, start, end, reformat)
+  return(data)
+}
+
+
+pageviews <- function(api, project, article, platform, user_type
+                    , granularity, start, end, reformat, ...){
 
   # Handle timestamps
   start <- pageview_timestamps(start)
@@ -155,10 +149,15 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
     end <- pageview_timestamps(end)
   }
 
+  platform[platform == "all"] <- "all-access"
+  user_type[user_type == "all"] <- "all-agents"
+  article <- curl::curl_escape(article)
+
   # Construct parameters
-  parameters <- paste("aggregate", project, ifelse(platform == "all", "all-access", platform),
-                      ifelse(user_type == "all", "all-agents", user_type), granularity,
-                      start, end, sep = "/")
+  parameters <- expand.grid(api, project, platform, user_type
+                      , article, granularity, start, end)
+  parameters <- apply(parameters, 1, paste, collapse = "/")
+  parameters <- gsub("\\/{1,}", "/", parameters)
 
   # Run
   data <- pv_query(parameters, reformat, ...)

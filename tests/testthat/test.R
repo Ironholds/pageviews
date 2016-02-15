@@ -44,7 +44,17 @@ test_that("Timestamps functions work with API", {
   expect_true(ncol(result) == 8)
 })
 
-test_that("'All' parameter is broken in api", {
+test_that("'All' parameter is broken in wikimedia api", {
   expect_error(top_articles(day = "all", reformat = FALSE)
                , regexp = "The date\\(s\\) you used are valid")
+})
+
+test_that("User type and  parameters can be used", {
+  result <- article_pageviews(start = Sys.Date() - 10,
+  , end = Sys.Date()
+  , user_type = c("all", "user", "spider", "bot")
+  , platform = c("all", "desktop", "mobile-web", "mobile-app"))
+  expect_true(is.data.frame(result))
+  expect_true(nrow(result) == 160)
+  expect_true(ncol(result) == 8)
 })
