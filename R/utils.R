@@ -5,7 +5,7 @@ pv_query <- function(params, reformat = TRUE, ...){
 
   # Check response success
   if(httr::status_code(result) == 404){
-    stop("The pageview data available does not cover the range you requested")
+    stop(httr::content(result, type = "application/json")$detail)
   } else {
     httr::stop_for_status(result)
   }

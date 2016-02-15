@@ -6,8 +6,8 @@
 \usage{
 article_pageviews(project = "en.wikipedia",
   article = "R (programming language)", platform = "all",
-  user_type = "all", start = "2015100100", end = NULL, reformat = TRUE,
-  ...)
+  user_type = "all", granularity = "daily", start = "2015100100",
+  end = NULL, reformat = TRUE, ...)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}

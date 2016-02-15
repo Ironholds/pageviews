@@ -39,15 +39,12 @@ test_that("Timestamps functions work with API", {
       , article = "R_(Programmiersprache)"
       , start = pageview_timestamps(as.Date("2015-09-01"))
       , end = pageview_timestamps(as.Date("2015-09-30")))
-
   expect_true(is.data.frame(result))
   expect_true(nrow(result) == 30)
   expect_true(ncol(result) == 8)
 })
 
-test_that("All parameter works with top articles", {
-  result <- top_articles(day = "all", reformat = FALSE)
-  expect_true(is.data.frame(result))
-  expect_true(nrow(result) == 30)
-  expect_true(ncol(result) == 8)
+test_that("'All' parameter is broken in Wikimedia API", {
+  expect_error(top_articles(granularity = "month")
+               , regexp = "The date\\(s\\) you used are valid")
 })
