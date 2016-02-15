@@ -8,10 +8,10 @@
 #'@param article the article(s) you want to retrieve data for. Ideally features underscores in the title
 #'instead of spaces, but happily converts if you forget to do this.
 #'
-#'@param platform The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; Vector of "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param user_type the type of users. One of "all", "user", "spider" or "bot". "all" by default.
+#'@param user_type the type of users. Vector of "all", "user", "spider" or "bot". "all" by default.
 #'
 #'@param start the start \code{YYYYMMDDHH} of the range you want to cover. This can be
 #'easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}.
@@ -34,15 +34,18 @@
 #'obama_pageviews <- article_pageviews(article = "Barack_Obama")
 #'
 #'@export
-article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)",
-                              platform = "all", user_type = "all",
-                              start = "2015100100", end = NULL, reformat = TRUE, ...){
+article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)"
+                              , platform = "all", user_type = "all", granularity = "daily"
+                              , start = "2015100100", end = NULL, reformat = TRUE, ...){
 
+  if(granularity != "daily"){
+    warning("Granularities besides daily are not currently supported by the `article_pageviews` function.")
+  }
 
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
 
   data <- pageviews("per-article", project, article, platform, user_type
-                      , granularity = "daily", start, end, reformat)
+                      , granularity, start, end, reformat)
   return(data)
 }
 
@@ -53,7 +56,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@param project the name of the project, structured as \code{[language_code].[project]}
 #'(see the default).
 #'
-#'@param platform The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; vector of "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
 #'@param year The year the articles were "top" in. 2015 by default.
@@ -79,13 +82,15 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'
 #'@importFrom jsonlite fromJSON
 #'@export
-top_articles <- function(project = "en.wikipedia", platform = "all", year = "2015",
-                         month = "10", day = "01", reformat = TRUE, ...) {
+top_articles <- function(project = "en.wikipedia", platform = "all"
+                        , start = as.Date("2015-10-01")
+                        , granularity = "daily", reformat = TRUE, ...) {
 
   platform[platform == "all"] <- "all-access"
 
-  parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform),
-                      year, month, ifelse(day == "all", "all-days", day))
+  parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform)
+                      , format(start, "%Y"), format(start, "%m")
+                      , ifelse(granularity != "daily", "all-days", format(start, "%d")))
 
   parameters <- apply(parameters, 1, paste, collapse = "/")
   results <- pv_query(parameters, reformat, ...)
@@ -100,10 +105,10 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 #'@param project the name of the project, structured as \code{[language_code].[project]}
 #'(see the default).
 #'
-#'@param platform The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; vector of "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param user_type the type of users. One of "all", "user", "spider" or "bot". "all" by default.
+#'@param user_type the type of users. Vector of "all", "user", "spider" or "bot". "all" by default.
 #'
 #'@param granularity the granularity of data to return; do you want hourly or daily counts? Set
 #'to "daily" by default.
@@ -129,9 +134,9 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 #'and \code{\link{article_pageviews}} for per-article pageviews.
 #'
 #'@export
-project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all",
-                              granularity = "daily", start = "2015100100", end = NULL, reformat = TRUE,
-                              ...){
+project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all"
+                              , granularity = "daily", start = "2015100100", end = NULL
+                              , reformat = TRUE, ...){
   data <- pageviews("aggregate", project, article = "", platform, user_type
                       , granularity, start, end, reformat)
   return(data)
