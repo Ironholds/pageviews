@@ -34,10 +34,13 @@
 #'obama_pageviews <- article_pageviews(article = "Barack_Obama")
 #'
 #'@export
-article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)",
-                              platform = "all", user_type = "all",
-                              start = "2015100100", end = NULL, reformat = TRUE, ...){
+article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)"
+                              , platform = "all", user_type = "all", granularity = "daily"
+                              , start = "2015100100", end = NULL, reformat = TRUE, ...){
 
+  if(granularity != "daily"){
+    warning("Granularities besides daily are not currently supported by the `article_pageviews` function.")
+  }
 
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
   if(length(article) > 1){
@@ -97,11 +100,11 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'
 #'@importFrom jsonlite fromJSON
 #'@export
-top_articles <- function(project = "en.wikipedia", platform = "all", year = "2015",
-                         month = "10", day = "01", reformat = TRUE, ...) {
-
-  parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform),
-                      year, month, sep = "/", ifelse(day == "all", "all-days", day))
+top_articles <- function(project = "en.wikipedia", platform = "all", start = as.Date("2015-10-01")
+                        , granularity = "daily", reformat = TRUE, ...) {
+  parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform)
+                      , format(start, "%Y"), format(start, "%m")
+                      , ifelse(granularity != "daily", "all-days", format(start, "%d")), sep = "/")
   results <- pv_query(parameters, reformat, ...)
 
   return(results)

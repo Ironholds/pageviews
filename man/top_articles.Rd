@@ -4,8 +4,9 @@
 \alias{top_articles}
 \title{Retrieve Data on Top Articles}
 \usage{
-top_articles(project = "en.wikipedia", platform = "all", year = "2015",
-  month = "10", day = "01", reformat = TRUE, ...)
+top_articles(project = "en.wikipedia", platform = "all",
+  start = as.Date("2015-10-01"), granularity = "daily", reformat = TRUE,
+  ...)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}
@@ -14,16 +15,16 @@ top_articles(project = "en.wikipedia", platform = "all", year = "2015",
 \item{platform}{The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
 "mobile-app". Set to "all" by default.}
 
+\item{reformat}{Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.}
+
+\item{...}{further arguments to pass to httr's GET.}
+
 \item{year}{The year the articles were "top" in. 2015 by default.}
 
 \item{month}{The month the articles were "top" in. "10" by default.}
 
 \item{day}{The day the articles were "top" in. "01" by default; can be set to "all", for all
 the days in \code{month}.}
-
-\item{reformat}{Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.}
-
-\item{...}{further arguments to pass to httr's GET.}
 }
 \description{
 \code{top_articles} grabs data on the top articles for a project

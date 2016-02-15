@@ -44,7 +44,7 @@ test_that("Timestamps functions work with API", {
   expect_true(ncol(result) == 8)
 })
 
-test_that("'All' parameter is broken in api", {
-  expect_error(top_articles(day = "all", reformat = FALSE)
+test_that("'All' parameter is broken in Wikimedia API", {
+  expect_error(top_articles(granularity = "month")
                , regexp = "The date\\(s\\) you used are valid")
 })
