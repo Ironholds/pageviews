@@ -5,9 +5,8 @@ pv_query <- function(params, reformat, ...){
 
   if(reformat == TRUE){ # collapses all results into one dataframe
     return(do.call(rbind, data_list))
-  } else {
-    return(data_list)
   }
+  return(data_list)
 }
 
 pv_query_single <- function(params, reformat, ...){
@@ -34,8 +33,8 @@ reformat_data <- function(data){
   data <- data$items
 
   if("articles" %in% names(data[[1]])){ # Handle Top Articles formatting
-    result <- as.data.frame(do.call(rbind, data[[1]]$articles)
-                        , stringsAsFactors = FALSE)
+    result <- as.data.frame(do.call(rbind, data[[1]]$articles),
+                        stringsAsFactors = FALSE)
     data[[1]]$articles <- NULL
     meta <- do.call(cbind, data[[1]])
     data <- cbind(meta, result)
