@@ -68,8 +68,8 @@ reformat_data <- function(data){
 
 
   # Set Consistent Column Order
-  col_order <- c("project", "language", "article", "access"
-                , "agent", "granularity", "date", "rank", "views")
+  col_order <- c("project", "language", "article", "access",
+                "agent", "granularity", "date", "rank", "views")
   col_order <- col_order[col_order %in% names(data)]
   data <- data[, col_order]
 

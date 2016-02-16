@@ -34,15 +34,15 @@
 #'obama_pageviews <- article_pageviews(article = "Barack_Obama")
 #'
 #'@export
-article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)"
-                              , platform = "all", user_type = "all"
-                              , start = "2015100100", end = NULL, reformat = TRUE, ...){
+article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)",
+                              platform = "all", user_type = "all",
+                              start = "2015100100", end = NULL, reformat = TRUE, ...){
 
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
   article <- curl::curl_escape(article)
 
-  data <- pageviews("per-article", project, article, platform, user_type
-                      , granularity = "daily", start, end, reformat)
+  data <- pageviews("per-article", project, article, platform, user_type,
+                    granularity = "daily", start, end, reformat)
   return(data)
 }
 
@@ -77,15 +77,15 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'
 #'@importFrom jsonlite fromJSON
 #'@export
-top_articles <- function(project = "en.wikipedia", platform = "all"
-                        , start = as.Date("2015-10-01")
-                        , granularity = "daily", reformat = TRUE, ...) {
+top_articles <- function(project = "en.wikipedia", platform = "all",
+                        start = as.Date("2015-10-01"),
+                        granularity = "daily", reformat = TRUE, ...) {
 
   platform[platform == "all"] <- "all-access"
 
-  parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform)
-                      , format(start, "%Y"), format(start, "%m")
-                      , ifelse(granularity == "daily", format(start, "%d"), "all-days"))
+  parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform),
+                      format(start, "%Y"), format(start, "%m"),
+                      ifelse(granularity == "daily", format(start, "%d"), "all-days"))
 
   parameters <- apply(parameters, 1, paste, collapse = "/")
   results <- pv_query(parameters, reformat, ...)
@@ -129,17 +129,17 @@ top_articles <- function(project = "en.wikipedia", platform = "all"
 #'and \code{\link{article_pageviews}} for per-article pageviews.
 #'
 #'@export
-project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all"
-                              , granularity = "daily", start = "2015100100", end = NULL
-                              , reformat = TRUE, ...){
-  data <- pageviews("aggregate", project, article = "", platform, user_type
-                      , granularity, start, end, reformat)
+project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all",
+                              granularity = "daily", start = "2015100100", end = NULL,
+                              reformat = TRUE, ...){
+  data <- pageviews("aggregate", project, article = "", platform, user_type,
+                      granularity, start, end, reformat)
   return(data)
 }
 
 
-pageviews <- function(api, project, article, platform, user_type
-                    , granularity, start, end, reformat, ...){
+pageviews <- function(api, project, article, platform, user_type,
+                    granularity, start, end, reformat, ...){
 
   # Handle timestamps
   start <- pageview_timestamps(start)
@@ -153,8 +153,8 @@ pageviews <- function(api, project, article, platform, user_type
   user_type[user_type == "all"] <- "all-agents"
 
   # Construct parameters
-  parameters <- expand.grid(api, project, platform, user_type
-                      , article, granularity, start, end)
+  parameters <- expand.grid(api, project, platform, user_type,
+                      article, granularity, start, end)
   parameters <- apply(parameters, 1, paste, collapse = "/")
   parameters <- gsub("\\/{1,}", "/", parameters)
 
