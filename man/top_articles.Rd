@@ -12,7 +12,7 @@ top_articles(project = "en.wikipedia", platform = "all",
 \item{project}{the name of the project, structured as \code{[language_code].[project]}
 (see the default).}
 
-\item{platform}{The platform the pageviews came from; vector of "all", "desktop", "mobile-web" and
+\item{platform}{The platform the pageviews came from; one or more of  "all", "desktop", "mobile-web" and
 "mobile-app". Set to "all" by default.}
 
 \item{start}{The date the articles were "top" in. 2015 by default.}
