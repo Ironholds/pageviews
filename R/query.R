@@ -8,10 +8,10 @@
 #'@param article the article(s) you want to retrieve data for. Ideally features underscores in the title
 #'instead of spaces, but happily converts if you forget to do this.
 #'
-#'@param platform The platform the pageviews came from; Vector of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; One or more of "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param user_type the type of users. Vector of "all", "user", "spider" or "bot". "all" by default.
+#'@param user_type the type of users. One or more of "all", "user", "spider" or "bot". "all" by default.
 #'
 #'@param start the start \code{YYYYMMDDHH} of the range you want to cover. This can be
 #'easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}.
@@ -53,7 +53,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@param project the name of the project, structured as \code{[language_code].[project]}
 #'(see the default).
 #'
-#'@param platform The platform the pageviews came from; vector of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; one or more of  "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
 #'@param start The date the articles were "top" in. 2015 by default.
@@ -100,10 +100,10 @@ top_articles <- function(project = "en.wikipedia", platform = "all",
 #'@param project the name of the project, structured as \code{[language_code].[project]}
 #'(see the default).
 #'
-#'@param platform The platform the pageviews came from; vector of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; one or more of  "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param user_type the type of users. Vector of "all", "user", "spider" or "bot". "all" by default.
+#'@param user_type the type of users. one or more of  "all", "user", "spider" or "bot". "all" by default.
 #'
 #'@param granularity the granularity of data to return; do you want hourly or daily counts? Set
 #'to "daily" by default.
