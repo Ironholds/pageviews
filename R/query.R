@@ -8,10 +8,10 @@
 #'@param article the article(s) you want to retrieve data for. Ideally features underscores in the title
 #'instead of spaces, but happily converts if you forget to do this.
 #'
-#'@param platform The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; One or more of "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param user_type the type of users. One of "all", "user", "spider" or "bot". "all" by default.
+#'@param user_type the type of users. One or more of "all", "user", "spider" or "bot". "all" by default.
 #'
 #'@param start the start \code{YYYYMMDDHH} of the range you want to cover. This can be
 #'easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}.
@@ -38,29 +38,11 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
                               platform = "all", user_type = "all",
                               start = "2015100100", end = NULL, reformat = TRUE, ...){
 
-
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
-  if(length(article) > 1){
-    return(lapply(article, article_pageviews, project = project, platform = platform,
-                  user_type = user_type, start = start, end = end, ...))
-  }
+  article <- curl::curl_escape(article)
 
-  # Handle timestamps
-  start <- pageview_timestamps(start)
-  if(is.null(end)){
-    end <- start
-  } else {
-    end <- pageview_timestamps(end)
-  }
-
-  # Construct parameters
-  parameters <- paste("per-article", project, ifelse(platform == "all", "all-access", platform),
-                      ifelse(user_type == "all", "all-agents", user_type), curl::curl_escape(article),
-                      "daily", start, end, sep = "/")
-
-  # Run and return
-  data <- pv_query(parameters, reformat, ...)
-
+  data <- pageviews("per-article", project, article, platform, user_type,
+                    granularity = "daily", start, end, reformat)
   return(data)
 }
 
@@ -71,15 +53,13 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@param project the name of the project, structured as \code{[language_code].[project]}
 #'(see the default).
 #'
-#'@param platform The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; one or more of  "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param year The year the articles were "top" in. 2015 by default.
+#'@param start The date the articles were "top" in. 2015 by default.
 #'
-#'@param month The month the articles were "top" in. "10" by default.
-#'
-#'@param day The day the articles were "top" in. "01" by default; can be set to "all", for all
-#'the days in \code{month}.
+#'@param granularity the granularity of data to return; "daily" or "monthly", depending on
+#' whether top articles should reflect trends in day or month of the \code{start} date
 #'
 #'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
 #'
@@ -97,11 +77,17 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'
 #'@importFrom jsonlite fromJSON
 #'@export
-top_articles <- function(project = "en.wikipedia", platform = "all", year = "2015",
-                         month = "10", day = "01", reformat = TRUE, ...) {
+top_articles <- function(project = "en.wikipedia", platform = "all",
+                        start = as.Date("2015-10-01"),
+                        granularity = "daily", reformat = TRUE, ...) {
 
-  parameters <- paste("top", project, ifelse(platform == "all", "all-access", platform),
-                      year, month, sep = "/", ifelse(day == "all", "all-days", day))
+  platform[platform == "all"] <- "all-access"
+
+  parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform),
+                      format(start, "%Y"), format(start, "%m"),
+                      ifelse(granularity == "daily", format(start, "%d"), "all-days"))
+
+  parameters <- apply(parameters, 1, paste, collapse = "/")
   results <- pv_query(parameters, reformat, ...)
 
   return(results)
@@ -114,10 +100,10 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 #'@param project the name of the project, structured as \code{[language_code].[project]}
 #'(see the default).
 #'
-#'@param platform The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+#'@param platform The platform the pageviews came from; one or more of  "all", "desktop", "mobile-web" and
 #'"mobile-app". Set to "all" by default.
 #'
-#'@param user_type the type of users. One of "all", "user", "spider" or "bot". "all" by default.
+#'@param user_type the type of users. one or more of  "all", "user", "spider" or "bot". "all" by default.
 #'
 #'@param granularity the granularity of data to return; do you want hourly or daily counts? Set
 #'to "daily" by default.
@@ -144,8 +130,16 @@ top_articles <- function(project = "en.wikipedia", platform = "all", year = "201
 #'
 #'@export
 project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all",
-                              granularity = "daily", start = "2015100100", end = NULL, reformat = TRUE,
-                              ...){
+                              granularity = "daily", start = "2015100100", end = NULL,
+                              reformat = TRUE, ...){
+  data <- pageviews("aggregate", project, article = "", platform, user_type,
+                      granularity, start, end, reformat)
+  return(data)
+}
+
+
+pageviews <- function(api, project, article, platform, user_type,
+                    granularity, start, end, reformat, ...){
 
   # Handle timestamps
   start <- pageview_timestamps(start)
@@ -155,10 +149,14 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
     end <- pageview_timestamps(end)
   }
 
+  platform[platform == "all"] <- "all-access"
+  user_type[user_type == "all"] <- "all-agents"
+
   # Construct parameters
-  parameters <- paste("aggregate", project, ifelse(platform == "all", "all-access", platform),
-                      ifelse(user_type == "all", "all-agents", user_type), granularity,
-                      start, end, sep = "/")
+  parameters <- expand.grid(api, project, platform, user_type,
+                      article, granularity, start, end)
+  parameters <- apply(parameters, 1, paste, collapse = "/")
+  parameters <- gsub("\\/{1,}", "/", parameters)
 
   # Run
   data <- pv_query(parameters, reformat, ...)

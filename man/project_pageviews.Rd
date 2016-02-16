@@ -12,10 +12,10 @@ project_pageviews(project = "en.wikipedia", platform = "all",
 \item{project}{the name of the project, structured as \code{[language_code].[project]}
 (see the default).}
 
-\item{platform}{The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+\item{platform}{The platform the pageviews came from; one or more of  "all", "desktop", "mobile-web" and
 "mobile-app". Set to "all" by default.}
 
-\item{user_type}{the type of users. One of "all", "user", "spider" or "bot". "all" by default.}
+\item{user_type}{the type of users. one or more of  "all", "user", "spider" or "bot". "all" by default.}
 
 \item{granularity}{the granularity of data to return; do you want hourly or daily counts? Set
 to "daily" by default.}

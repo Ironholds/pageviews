@@ -16,10 +16,10 @@ article_pageviews(project = "en.wikipedia",
 \item{article}{the article(s) you want to retrieve data for. Ideally features underscores in the title
 instead of spaces, but happily converts if you forget to do this.}
 
-\item{platform}{The platform the pageviews came from; one of "all", "desktop", "mobile-web" and
+\item{platform}{The platform the pageviews came from; One or more of "all", "desktop", "mobile-web" and
 "mobile-app". Set to "all" by default.}
 
-\item{user_type}{the type of users. One of "all", "user", "spider" or "bot". "all" by default.}
+\item{user_type}{the type of users. One or more of "all", "user", "spider" or "bot". "all" by default.}
 
 \item{start}{the start \code{YYYYMMDDHH} of the range you want to cover. This can be
 easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}.}

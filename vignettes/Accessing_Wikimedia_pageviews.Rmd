@@ -18,57 +18,33 @@ different types of users and different types of traffic. The `pageviews` package
 ## Per-article data
 
 The most granular data available is on a per-article basis, and can be accessed with `article_pageviews`. This takes a project,
-in the form `language`.`project_class`, an article title (with or without spacing), start and (optionally) end dates, specified in a YYYYMMDDHH format, and (should you choose) the platform and user type to return. By default, it reformats the resulting data as a data.frame:
+in the form `language`.`project_class`, an article title (with or without spacing), start and (optionally) end dates, specified as R date objects, and (should you choose) the platform and user type to return. By default, it reformats the resulting data as a data.frame:
 
-```{r, eval = FALSE}
-str(article_pageviews(project = "de.wikipedia", article = "R_(Programmiersprache)",
-                      start = "2015110100", end = "2015110300"))
-'data.frame':	3 obs. of  6 variables:
- $ project  : chr  "de.wikipedia" "de.wikipedia" "de.wikipedia"
- $ article  : chr  "R_(Programmiersprache)" "R_(Programmiersprache)" "R_(Programmiersprache)"
- $ timestamp: chr  "2015110100" "2015110200" "2015110300"
- $ access   : chr  "all-access" "all-access" "all-access"
- $ agent    : chr  "all-agents" "all-agents" "all-agents"
- $ views    : num  308 536 537
+```{r}
+library(pageviews)
+str(article_pageviews(project = "de.wikipedia", article = "R_(Programmiersprache)"
+  , start = as.Date('2015-11-01'), end = as.Date("2015-11-02")
+  , user_type = c("user", "bot"), platform = c("desktop", "mobile-web")))
 ```
 
-With the `user_type` and `platform` arguments you can include or exclude spiders and other automata, and switch between overall pageviews, pageviews to the desktop site, or pageviews to the mobile site or app.
-
-Generating the start and end dates can be done with `pageview_timestamps()`, which turns R's date and time
-objects into API-compatible timestamps.
+With the `user_type` and `platform` arguments you can include or exclude spiders and other automata, and switch between overall pageviews, pageviews to the desktop site, or pageviews to the mobile site or app. Both `user_type` and `platform` can be character strings or vectors, in which case all combinations of `user_type` and `platform` will be queried and returned.
 
 ## Per-project data
 
 Per-project data can also be retrieved using (you've guessed it) `project_pageviews`. This looks very similar to `article_pageviews`
-with one major difference: you can specify the granularity of the data, returning either daily or *hourly* data. The platform, user type
-and timestamp options are identical.
+with one major difference: you can specify the granularity of the data, returning either daily or *hourly* data. The platform, user type and timestamp options are identical.
 
-```{r, eval = FALSE}
+```{r}
 str(project_pageviews())
-'data.frame':	1 obs. of  6 variables:
- $ project    : chr "en.wikipedia"
- $ access     : chr "all-access"
- $ agent      : chr "all-agents"
- $ granularity: chr "daily"
- $ timestamp  : chr "2015100100"
- $ views      : num 2.72e+08
 ```
+
 ## Top articles
 
 With `top_articles` you can get data about the top 1,000 articles by pageviews on a project within a given timeframe (and on a given platform). This uses distinct year/month/day arguments, and for month and day, you can select "all" indicating that you want the top
 articles overall in a given year or month respectively.
 
-```{r, eval = FALSE}
-> str(top_articles())
-'data.frame':	1000 obs. of  8 variables:
- $ article: chr  "Main_Page" "Special:Search" "Special:BlankPage" "-" ...
- $ views  : int  18840697 3191975 1862191 1660878 293537 289710 271152 195670 163707 124751 ...
- $ rank   : int  1 2 3 4 5 6 7 8 9 10 ...
- $ project: chr  "en.wikipedia" "en.wikipedia" "en.wikipedia" "en.wikipedia" ...
- $ access : chr  "all-access" "all-access" "all-access" "all-access" ...
- $ year   : chr  "2015" "2015" "2015" "2015" ...
- $ month  : chr  "10" "10" "10" "10" ...
- $ day    : chr  "01" "01" "01" "01" ...
+```{r}
+str(top_articles())
 ```
 
 The underlying data source here is likely to change, because it currently contains some automata, so be aware that there may be noise
