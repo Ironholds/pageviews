@@ -62,8 +62,12 @@ reformat_data <- function(data){
   data$granularity <- as.character(data$granularity)
 
   # Agent and article only contained in some queries
-  if(!is.null(data$agent)) data$agent <- as.character(data$agent)
-  if(!is.null(data$article)) data$article <- as.character(data$article)
+  if(!is.null(data$agent)){
+    data$agent <- as.character(data$agent)
+  }
+  if(!is.null(data$article)){
+    data$article <- as.character(data$article)
+  }
 
 
   # Set Consistent Column Order
