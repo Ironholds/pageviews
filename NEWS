@@ -1,4 +1,4 @@
-Version 0.3.0 [WIP]
+Version 0.3.0
 
 BUG FIXES
 * Article titles are now percent-encoded before the GET request is sent. Thanks to Thomas Willi

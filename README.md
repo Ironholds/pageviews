@@ -13,10 +13,11 @@ __Status:__ Stable
 Please note that this project is released with a [Contributor Code of Conduct](https://github.com/Ironholds/pageviews/blob/master/CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## Installation
-Version 0.2.9000 can be obtained with:
-
-    devtools::install_github("ironholds/pageviews")
 
 For the stable release:
 
     install.packages("pageviews")
+
+For the developer release:
+
+    devtools::install_github("ironholds/pageviews")
