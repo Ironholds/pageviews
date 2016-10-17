@@ -6,8 +6,7 @@ Author: Oliver Keyes [aut, cre], Jeremiah Lewis [ctb]
 Maintainer: Oliver Keyes <ironholds@gmail.com>
 Description: Pageview data from the 'Wikimedia' sites, such as
     'Wikipedia' <https://www.wikipedia.org/>, from entire projects to per-article
-    levels of granularity, through the new RESTful API and data source <https://
-    wikimedia.org/api/rest_v1/?doc>.
+    levels of granularity, through the new RESTful API and data source <https://wikimedia.org/api/rest_v1/?doc>.
 License: MIT + file LICENSE
 LazyData: true
 URL: https://github.com/ironholds/pageviews
