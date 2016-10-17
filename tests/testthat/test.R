@@ -51,7 +51,7 @@ test_that("Basic per-article queries work", {
 test_that("Basic per-article queries work (with date objects)", {
   result <- article_pageviews(start = Sys.Date() - 10, end = Sys.Date())
   expect_true(is.data.frame(result))
-  testthat::expect_gte(nrow(result), 10)
+  testthat::expect_gte(nrow(result), 9)
   expect_true(ncol(result) == 8)
   expect_true(is.character(result$project))
   expect_true(is.character(result$language))
