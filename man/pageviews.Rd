@@ -9,4 +9,3 @@
 Pageview data from the 'Wikimedia' sites, such as Wikipedia (https://www.wikipedia.org/),
 from entire projects to by-article levels of granularity.
 }
-

@@ -45,4 +45,3 @@ enwiki_hourly <- project_pageviews(granularity = "hourly", end = "2015100123")
 \code{\link{top_articles}} for the top articles per project in a given date range,
 and \code{\link{article_pageviews}} for per-article pageviews.
 }
-

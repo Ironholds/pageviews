@@ -47,4 +47,3 @@ obama_pageviews <- article_pageviews(article = "Barack_Obama")
 \code{\link{top_articles}} for the top articles per project in a given date range,
 and \code{\link{project_pageviews}} for per-project pageviews.
 }
-

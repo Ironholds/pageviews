@@ -34,4 +34,3 @@ pageview_timestamps("2016020800")
 \code{\link{article_pageviews}} and \code{\link{project_pageviews}}, where you
 can make use of this function.
 }
-

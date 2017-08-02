@@ -40,4 +40,3 @@ enwiki_mobile_top <- top_articles(platform = "mobile-web")
 \code{\link{article_pageviews}} for per-article pageviews and \code{\link{project_pageviews}} for
 per-project pageviews.
 }
-
