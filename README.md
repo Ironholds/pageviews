@@ -5,8 +5,8 @@ __Author:__ Oliver Keyes<br/>
 __License:__ [MIT](http://opensource.org/licenses/MIT)<br/>
 __Status:__ Stable
 
-![Build Status](https://travis-ci.org/Ironholds/pageviews.svg?branch=master)
-![downloads](http://cranlogs.r-pkg.org/badges/grand-total/pageviews)
+![Build Status](https://travis-ci.org/Ironholds/pageviews.svg?branch=master) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ores)](https://cran.r-project.org/package=ores
+) ![downloads](http://cranlogs.r-pkg.org/badges/grand-total/pageviews)
 
 `pageviews` provides data from the new Wikimedia RESTful API for pageview data. It allows you to retrieve per-article, per-project, and top-1000 pageview data covering a wide range of times and with filtering around the user's class and platform.
 
