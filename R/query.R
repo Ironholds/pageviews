@@ -4,10 +4,15 @@ pageviews <- function(api, project, article, platform, user_type,
   # Handle timestamps
   start <- pageview_timestamps(start)
   if(is.null(end)){
-    end <- start
-  } else {
-    end <- pageview_timestamps(end)
+   if (granularity == "monthly"){
+      end <- as.Date(start, format = "%Y%m%d%H") + 31
+    }else{
+      end <- start
+    }
   }
+  end <- pageview_timestamps(end) 
+  
+
   
   platform[platform == "all"] <- "all-access"
   user_type[user_type == "all"] <- "all-agents"
@@ -21,7 +26,6 @@ pageviews <- function(api, project, article, platform, user_type,
   
   # Run
   data <- pv_query(parameters, reformat, ...)
-  
   return(data)
 }
 
@@ -49,6 +53,9 @@ pageviews <- function(api, project, article, platform, user_type,
 #'
 #'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
 #'
+#'@param granularity the granularity of data to return; "daily" or "monthly", depending on
+#' whether pageview data should reflect trends in days or months.
+  
 #'@param ... further arguments to pass to httr's GET.
 #'
 #'@seealso \code{\link{top_articles}} for the top articles per project in a given date range,
@@ -64,13 +71,14 @@ pageviews <- function(api, project, article, platform, user_type,
 #'@export
 article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)",
                               platform = "all", user_type = "all",
-                              start = "2015100100", end = NULL, reformat = TRUE, ...){
+                              start = "2015100100", end = NULL, reformat = TRUE, 
+                              granularity="daily",...){
 
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
   article <- curl::curl_escape(article)
 
   data <- pageviews("per-article", project, article, platform, user_type,
-                    granularity = "daily", start, end, reformat)
+                    granularity, start, end, reformat, ...)
   return(data)
 }
 
@@ -87,7 +95,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@param start The date the articles were "top" in. 2015 by default.
 #'
 #'@param granularity the granularity of data to return; "daily" or "monthly", depending on
-#' whether top articles should reflect trends in day or month of the \code{start} date
+#' whether top articles should reflect trends in day or month of the \code{start} date.
 #'
 #'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
 #'
@@ -198,7 +206,7 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
 #'enwiki_2013_2015_old <- old_pageviews()
 #'
 #'# Break it down to hourly
-#'old_enwiki_hourly <- project_pageviews(granularity = "hourly", end = "2013110100")
+#'old_enwiki_hourly <- old_pageviews(granularity = "hourly", end = "2013110100")
 #'
 #'@seealso \code{\link{top_articles}} for the top articles per project in a given date range,
 #'\code{\link{project_pageviews}} for per-project pageviews under the new definition,
@@ -212,10 +220,14 @@ old_pageviews <- function(project = "en.wikipedia", platform = "all",
   # Handle timestamps
   start <- pageview_timestamps(start)
   if(is.null(end)){
-    end <- start
-  } else {
-    end <- pageview_timestamps(end)
+    if (granularity == "monthly"){
+      end <- as.Date(start, format = "%Y%m%d%H") + 31
+    }else{
+      end <- start
+    }
   }
+  end <- pageview_timestamps(end) 
+
   
   # Clean up platform choice
   platform[platform == "all"] <- "all-sites"

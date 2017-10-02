@@ -7,7 +7,7 @@
 article_pageviews(project = "en.wikipedia",
   article = "R (programming language)", platform = "all",
   user_type = "all", start = "2015100100", end = NULL, reformat = TRUE,
-  ...)
+  granularity = "daily", ...)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}
@@ -28,6 +28,9 @@ easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}.
 that it returns 1 day of data.}
 
 \item{reformat}{Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.}
+
+\item{granularity}{the granularity of data to return; "daily" or "monthly", depending on
+whether pageview data should reflect trends in days or months.}
 
 \item{...}{further arguments to pass to httr's GET.}
 }
