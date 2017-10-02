@@ -104,3 +104,19 @@ test_that("Hourly granularity works for `project_pageviews`", {
   expect_true(nrow(result) == 24)
   expect_true(ncol(result) == 7)
 })
+
+
+test_that("Monthly granularity works for `article_pageviews`", {
+  result <- project_pageviews(granularity = "monthly", end = "2016100100")
+  expect_true(is.data.frame(result))
+  expect_true(nrow(result) == 12)
+  expect_true(ncol(result) == 7)
+})
+
+test_that("Monthly granularity works for `top_articles`", {
+  result <- top_articles(granularity = "monthly")
+  expect_true(is.data.frame(result))
+  expect_true(nrow(result) == 1000)
+  expect_true(ncol(result) == 8)
+})
+
