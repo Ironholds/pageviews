@@ -11,7 +11,7 @@ pv_query <- function(params, reformat, ...){
 
 pv_query_single <- function(params, reformat, ...){
   url <- paste0("https://wikimedia.org/api/rest_v1/metrics/pageviews/", params)
-
+  
   result <- httr::GET(url, httr::user_agent("pageviews API client library - https://github.com  /Ironholds/pageviews"))
   # Check response success
   if(httr::status_code(result) == 404){
@@ -39,7 +39,7 @@ reformat_data <- function(data){
     meta <- do.call(cbind, data[[1]])
     data <- cbind(meta, result)
 
-    if(all(data$day == "all")){
+    if(all(data$day == "all-days")){
       data["granularity"] <- "month"
       data$day <- 1
     } else {

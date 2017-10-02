@@ -21,6 +21,9 @@
 #'
 #'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
 #'
+#'@param granularity the granularity of data to return; "daily" or "monthly", depending on
+#' whether pageview data should reflect trends in days or months.
+#'
 #'@param ... further arguments to pass to httr's GET.
 #'
 #'@seealso \code{\link{top_articles}} for the top articles per project in a given date range,
@@ -36,13 +39,14 @@
 #'@export
 article_pageviews <- function(project = "en.wikipedia", article = "R (programming language)",
                               platform = "all", user_type = "all",
-                              start = "2015100100", end = NULL, reformat = TRUE, ...){
-
+                              start = "2015100100", end = NULL, reformat = TRUE, 
+                              granularity = "daily", ...){
+  
   article <- gsub(x = article, pattern = " ", replacement = "_", fixed = TRUE)
   article <- curl::curl_escape(article)
-
+  
   data <- pageviews("per-article", project, article, platform, user_type,
-                    granularity = "daily", start, end, reformat)
+                    granularity, start, end, reformat, ...)
   return(data)
 }
 
@@ -59,7 +63,7 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@param start The date the articles were "top" in. 2015 by default.
 #'
 #'@param granularity the granularity of data to return; "daily" or "monthly", depending on
-#' whether top articles should reflect trends in day or month of the \code{start} date
+#' whether top articles should reflect trends in day or month of the \code{start} date.
 #'
 #'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
 #'
@@ -78,18 +82,18 @@ article_pageviews <- function(project = "en.wikipedia", article = "R (programmin
 #'@importFrom jsonlite fromJSON
 #'@export
 top_articles <- function(project = "en.wikipedia", platform = "all",
-                        start = as.Date("2015-10-01"),
-                        granularity = "daily", reformat = TRUE, ...) {
-
+                         start = as.Date("2015-10-01"),
+                         granularity = "daily", reformat = TRUE, ...) {
+  
   platform[platform == "all"] <- "all-access"
-
+  
   parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform),
-                      format(start, "%Y"), format(start, "%m"),
-                      ifelse(granularity == "daily", format(start, "%d"), "all-days"))
-
+                            format(start, "%Y"), format(start, "%m"),
+                            ifelse(granularity == "daily", format(start, "%d"), "all-days"))
+  
   parameters <- apply(parameters, 1, paste, collapse = "/")
   results <- pv_query(parameters, reformat, ...)
-
+  
   return(results)
 }
 
@@ -133,33 +137,35 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
                               granularity = "daily", start = "2015100100", end = NULL,
                               reformat = TRUE, ...){
   data <- pageviews("aggregate", project, article = "", platform, user_type,
-                      granularity, start, end, reformat)
+                    granularity, start, end, reformat)
   return(data)
 }
 
 
 pageviews <- function(api, project, article, platform, user_type,
-                    granularity, start, end, reformat, ...){
+                      granularity, start, end, reformat, ...){
 
   # Handle timestamps
   start <- pageview_timestamps(start)
   if(is.null(end)){
-    end <- start
-  } else {
-    end <- pageview_timestamps(end)
+    if (granularity == "monthly"){
+      end <- as.Date(start, format = "%Y%m%d%H") + 31
+    }else{
+      end <- start
+    }
   }
-
+  end <- pageview_timestamps(end) 
   platform[platform == "all"] <- "all-access"
   user_type[user_type == "all"] <- "all-agents"
-
+  
   # Construct parameters
   parameters <- expand.grid(api, project, platform, user_type,
-                      article, granularity, start, end)
+                            article, granularity, start, end)
   parameters <- apply(parameters, 1, paste, collapse = "/")
   parameters <- gsub("\\/{1,}", "/", parameters)
-
+  
   # Run
   data <- pv_query(parameters, reformat, ...)
-
+  
   return(data)
 }
