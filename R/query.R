@@ -1,3 +1,31 @@
+pageviews <- function(api, project, article, platform, user_type,
+                      granularity, start, end, reformat, ...){
+  
+  # Handle timestamps
+  start <- pageview_timestamps(start)
+  if(is.null(end)){
+    end <- start
+  } else {
+    end <- pageview_timestamps(end)
+  }
+  
+  platform[platform == "all"] <- "all-access"
+  user_type[user_type == "all"] <- "all-agents"
+  
+  # Construct parameters
+  parameters <- expand.grid("pageviews/", api,
+                            project, platform, user_type,
+                            article, granularity, start, end)
+  parameters <- apply(parameters, 1, paste, collapse = "/")
+  parameters <- gsub("\\/{1,}", "/", parameters)
+  
+  # Run
+  data <- pv_query(parameters, reformat, ...)
+  
+  return(data)
+}
+
+
 #'@title Retrieve Pageview Data for an Article
 #'@description retrieves the pageview data for a particular article on a project, within
 #'a provided time-range.
@@ -83,9 +111,10 @@ top_articles <- function(project = "en.wikipedia", platform = "all",
 
   platform[platform == "all"] <- "all-access"
 
-  parameters <- expand.grid("top", project, ifelse(platform == "all", "all-access", platform),
-                      format(start, "%Y"), format(start, "%m"),
-                      ifelse(granularity == "daily", format(start, "%d"), "all-days"))
+  parameters <- expand.grid("pageviews/top",
+                            project, ifelse(platform == "all", "all-access", platform),
+                            format(start, "%Y"), format(start, "%m"),
+                            ifelse(granularity == "daily", format(start, "%d"), "all-days"))
 
   parameters <- apply(parameters, 1, paste, collapse = "/")
   results <- pv_query(parameters, reformat, ...)
@@ -125,8 +154,9 @@ top_articles <- function(project = "en.wikipedia", platform = "all",
 #'# Break it down to hourly
 #'enwiki_hourly <- project_pageviews(granularity = "hourly", end = "2015100123")
 #'
-#'@seealso \code{\link{top_articles}} for the top articles per project in a given date range,
-#'and \code{\link{article_pageviews}} for per-article pageviews.
+#'@seealso \code{\link{old_pageviews}}, for 2008-2016 data, \code{\link{top_articles}} for the top articles
+#'per project in a given date range, and \code{\link{article_pageviews}}
+#'for per-article pageviews.
 #'
 #'@export
 project_pageviews <- function(project = "en.wikipedia", platform = "all", user_type = "all",
@@ -137,10 +167,48 @@ project_pageviews <- function(project = "en.wikipedia", platform = "all", user_t
   return(data)
 }
 
-
-pageviews <- function(api, project, article, platform, user_type,
-                    granularity, start, end, reformat, ...){
-
+#'@title Retrieve Legacy Pageview Counts
+#'
+#'@description This retrieves per-project pageview counts from January 2008
+#'to July 2016. These counts are calculated using the 'legacy' (read: old)
+#'model, which overcounts due to its inclusion of web-crawlers and
+#'similar automata.
+#'
+#'@param project the name of the project, structured as \code{[language_code].[project]}
+#'(see the default).
+#'
+#'@param platform The platform the pageviews came from; one or more of  "all", "desktop" or "mobile".
+#'Set to "all" by default.
+#'
+#'@param granularity the granularity of data to return; do you want hourly, daily or monthly counts? Set
+#'to "daily" by default.
+#'
+#'@param start the start \code{YYYYMMDDHH} of the range you want to cover. This can be
+#'easily grabbed from R date/time objects using \code{\link{pageview_timestamps}}
+#'
+#'@param end the end \code{YYYYMMDDHH} of the range you want to cover. NULL by default, meaning
+#'that it returns 1 day/hour of data (depending on the value passed to \code{granularity}).
+#'
+#'@param reformat Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.
+#'
+#'@param ... further arguments to pass to httr's GET.
+#'
+#'@examples
+#'# Basic call
+#'enwiki_2013_2015_old <- old_pageviews()
+#'
+#'# Break it down to hourly
+#'old_enwiki_hourly <- project_pageviews(granularity = "hourly", end = "2013110100")
+#'
+#'@seealso \code{\link{top_articles}} for the top articles per project in a given date range,
+#'\code{\link{project_pageviews}} for per-project pageviews under the new definition,
+#'and \code{\link{article_pageviews}} for per-article pageviews.
+#'
+#'@export
+old_pageviews <- function(project = "en.wikipedia", platform = "all",
+                          granularity = "daily", start = "2013100100",
+                          end = "2015100100", reformat = TRUE, ...){
+  
   # Handle timestamps
   start <- pageview_timestamps(start)
   if(is.null(end)){
@@ -148,18 +216,18 @@ pageviews <- function(api, project, article, platform, user_type,
   } else {
     end <- pageview_timestamps(end)
   }
-
-  platform[platform == "all"] <- "all-access"
-  user_type[user_type == "all"] <- "all-agents"
-
-  # Construct parameters
-  parameters <- expand.grid(api, project, platform, user_type,
-                      article, granularity, start, end)
+  
+  # Clean up platform choice
+  platform[platform == "all"] <- "all-sites"
+  platform[platform == "desktop"] <- "desktop-site"
+  platform[platform == "mobile"] <- "mobile-site"
+  
+  parameters <- expand.grid("legacy/pagecounts/aggregate",
+                            project, platform, granularity, start,
+                            end)
   parameters <- apply(parameters, 1, paste, collapse = "/")
-  parameters <- gsub("\\/{1,}", "/", parameters)
-
-  # Run
-  data <- pv_query(parameters, reformat, ...)
-
-  return(data)
+  
+  results <- pv_query(parameters, reformat, old = TRUE, ...)
+  
+  return(results)
 }
