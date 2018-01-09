@@ -106,6 +106,21 @@ test_that("Hourly granularity works for `project_pageviews`", {
 })
 
 
+test_that("Basic old-method queries work", {
+  result <- old_pageviews()
+  expect_true(is.data.frame(result))
+  expect_true(nrow(result) == 731)
+  expect_true(ncol(result) == 6)
+  expect_true(is.character(result$project))
+  expect_true(is.character(result$language))
+  expect_true(is.character(result$access))
+  expect_true(is.character(result$granularity))
+  expect_true("POSIXct" %in% class(result$date))
+  expect_true(is.numeric(result$views))
+})
+
+
+
 test_that("Monthly granularity works for `article_pageviews`", {
   result <- project_pageviews(granularity = "monthly", end = "2016100100")
   expect_true(is.data.frame(result))
@@ -119,4 +134,3 @@ test_that("Monthly granularity works for `top_articles`", {
   expect_true(nrow(result) == 1000)
   expect_true(ncol(result) == 8)
 })
-
