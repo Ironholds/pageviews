@@ -83,9 +83,7 @@ pv_query_single <- function(params, reformat, old = FALSE, ...){
   } else {
     httr::stop_for_status(result)
   }
-  
   data <- httr::content(result)
-  
   if(reformat){
     if(old){
       data <- reformat_old(data)
@@ -93,56 +91,6 @@ pv_query_single <- function(params, reformat, old = FALSE, ...){
       data <- reformat_data(data)
     }
   }
-}
-
-
-reformat_old <- function(data){
-  
-  data <- do.call("rbind", lapply(data$items, function(x){
-    return(data.frame(project = x$project,
-                      access = x$`access-site`,
-                      granularity = x$granularity,
-                      timestamp = x$timestamp,
-                      views = x$count,
-                      stringsAsFactors = FALSE))
-  }))
-  
-  data$date <- as.POSIXct(as.character(data$timestamp), format = "%Y%m%d%H", tz = "UTC")
-  data$language <- gsub("(.*)\\.(.*)", "\\1", data$project)
-  data$project <- gsub("(.*)\\.(.*)", "\\2", data$project)
-  
-  # Set Consistent Column Order
-  col_order <- c("project", "language", "access",
-                 "granularity", "date", "views")
-  col_order <- col_order[col_order %in% names(data)]
-  data <- data[, col_order]
-  
-  return(data)
-}
-
-
-#'@importFrom httr stop_for_status GET user_agent content status_code
-pv_query_single <- function(params, reformat, old = FALSE, ...){
-  url <- paste0("https://wikimedia.org/api/rest_v1/metrics/", params)
-  
-  result <- httr::GET(url, httr::user_agent("pageviews API client library - https://github.com  /Ironholds/pageviews"))
-  # Check response success
-  if(httr::status_code(result) == 404){
-    stop(httr::content(result, type = "application/json")$detail)
-  } else {
-    httr::stop_for_status(result)
-  }
-  
-  data <- httr::content(result)
-  
-  if(reformat){
-    if(old){
-      data <- reformat_old(data)
-    } else {
-      data <- reformat_data(data)
-    }
-  }
-  
   return(data)
 }
 
@@ -151,7 +99,6 @@ pv_query <- function(params, reformat, ...){
   data_list <- lapply(as.list(params), pv_query_single, reformat = reformat, ...)
   if(reformat == TRUE){ 
     return(do.call(rbind, data_list))
-  }else{
-    return(data_list)
   }
+  return(data_list)
 }
