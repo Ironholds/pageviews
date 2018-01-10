@@ -8,7 +8,7 @@ reformat_data <- function(data){
     meta <- do.call(cbind, data[[1]])
     data <- cbind(meta, result)
     
-    if(all(data$day == "all")){
+    if(all(data$day == "all-days")){
       data["granularity"] <- "month"
       data$day <- 1
     } else {
@@ -48,6 +48,7 @@ reformat_data <- function(data){
   return(data)
 }
 
+
 reformat_old <- function(data){
   
   data <- do.call("rbind", lapply(data$items, function(x){
@@ -75,7 +76,6 @@ reformat_old <- function(data){
 #'@importFrom httr stop_for_status GET user_agent content status_code
 pv_query_single <- function(params, reformat, old = FALSE, ...){
   url <- paste0("https://wikimedia.org/api/rest_v1/metrics/", params)
-
   result <- httr::GET(url, httr::user_agent("pageviews API client library - https://github.com  /Ironholds/pageviews"))
   # Check response success
   if(httr::status_code(result) == 404){
@@ -83,9 +83,7 @@ pv_query_single <- function(params, reformat, old = FALSE, ...){
   } else {
     httr::stop_for_status(result)
   }
-
   data <- httr::content(result)
-
   if(reformat){
     if(old){
       data <- reformat_old(data)
@@ -93,15 +91,13 @@ pv_query_single <- function(params, reformat, old = FALSE, ...){
       data <- reformat_data(data)
     }
   }
-
   return(data)
 }
 
 pv_query <- function(params, reformat, ...){
   # Run multiple queries, return as list of results
   data_list <- lapply(as.list(params), pv_query_single, reformat = reformat, ...)
-  
-  if(reformat == TRUE){ # collapses all results into one dataframe
+  if(reformat == TRUE){ 
     return(do.call(rbind, data_list))
   }
   return(data_list)

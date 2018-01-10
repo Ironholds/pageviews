@@ -18,7 +18,7 @@ top_articles(project = "en.wikipedia", platform = "all",
 \item{start}{The date the articles were "top" in. 2015 by default.}
 
 \item{granularity}{the granularity of data to return; "daily" or "monthly", depending on
-whether top articles should reflect trends in day or month of the \code{start} date}
+whether top articles should reflect trends in day or month of the \code{start} date.}
 
 \item{reformat}{Whether to reformat the results as a \code{\link{data.frame}} or not. TRUE by default.}
 
