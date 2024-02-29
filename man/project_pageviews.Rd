@@ -4,9 +4,16 @@
 \alias{project_pageviews}
 \title{Retrieve Per-Project Pageview Counts}
 \usage{
-project_pageviews(project = "en.wikipedia", platform = "all",
-  user_type = "all", granularity = "daily", start = "2015100100",
-  end = NULL, reformat = TRUE, ...)
+project_pageviews(
+  project = "en.wikipedia",
+  platform = "all",
+  user_type = "all",
+  granularity = "daily",
+  start = "2015100100",
+  end = NULL,
+  reformat = TRUE,
+  ...
+)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}

@@ -3,7 +3,6 @@
 \docType{package}
 \name{pageviews}
 \alias{pageviews}
-\alias{pageviews-package}
 \title{An API client for Wikimedia traffic data}
 \description{
 Pageview data from the 'Wikimedia' sites, such as Wikipedia (https://www.wikipedia.org/),

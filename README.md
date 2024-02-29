@@ -1,7 +1,7 @@
 # pageviews
 An API client library for Wikimedia traffic data.
 
-__Author:__ Oliver Keyes<br/>
+__Author:__ Os Keyes<br/>
 __License:__ [MIT](http://opensource.org/licenses/MIT)<br/>
 __Status:__ Stable
 

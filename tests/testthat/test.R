@@ -83,7 +83,7 @@ test_that("Timestamps functions work with API", {
 test_that("User type and platform can be used (pageviews).", {
   result <- article_pageviews(start = Sys.Date() - 10,
     end = Sys.Date(),
-    user_type = c("all", "user", "spider", "bot"),
+    user_type = c("all", "user", "spider", "automated"),
     platform = c("all", "desktop", "mobile-web", "mobile-app"))
   expect_true(is.data.frame(result))
   expect_gt(length(unique(result$agent)), 1)
@@ -124,7 +124,7 @@ test_that("Basic old-method queries work", {
 test_that("Monthly granularity works for `article_pageviews`", {
   result <- project_pageviews(granularity = "monthly", end = "2016100100")
   expect_true(is.data.frame(result))
-  expect_true(nrow(result) == 12)
+  expect_true(nrow(result) == 13)
   expect_true(ncol(result) == 7)
 })
 

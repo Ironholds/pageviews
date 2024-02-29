@@ -4,9 +4,15 @@
 \alias{old_pageviews}
 \title{Retrieve Legacy Pageview Counts}
 \usage{
-old_pageviews(project = "en.wikipedia", platform = "all",
-  granularity = "daily", start = "2013100100", end = "2015100100",
-  reformat = TRUE, ...)
+old_pageviews(
+  project = "en.wikipedia",
+  platform = "all",
+  granularity = "daily",
+  start = "2013100100",
+  end = "2015100100",
+  reformat = TRUE,
+  ...
+)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}

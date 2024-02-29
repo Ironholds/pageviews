@@ -4,10 +4,17 @@
 \alias{article_pageviews}
 \title{Retrieve Pageview Data for an Article}
 \usage{
-article_pageviews(project = "en.wikipedia",
-  article = "R (programming language)", platform = "all",
-  user_type = "all", start = "2015100100", end = NULL, reformat = TRUE,
-  granularity = "daily", ...)
+article_pageviews(
+  project = "en.wikipedia",
+  article = "R (programming language)",
+  platform = "all",
+  user_type = "all",
+  start = "2015100100",
+  end = NULL,
+  reformat = TRUE,
+  granularity = "daily",
+  ...
+)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}

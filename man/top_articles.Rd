@@ -4,9 +4,14 @@
 \alias{top_articles}
 \title{Retrieve Data on Top Articles}
 \usage{
-top_articles(project = "en.wikipedia", platform = "all",
-  start = as.Date("2015-10-01"), granularity = "daily", reformat = TRUE,
-  ...)
+top_articles(
+  project = "en.wikipedia",
+  platform = "all",
+  start = as.Date("2015-10-01"),
+  granularity = "daily",
+  reformat = TRUE,
+  ...
+)
 }
 \arguments{
 \item{project}{the name of the project, structured as \code{[language_code].[project]}
